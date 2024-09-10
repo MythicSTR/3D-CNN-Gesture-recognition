@@ -21,31 +21,32 @@ def copyDirectory(src , dest):
 
 
 
-path_dest = 'training_samples' # The folder where we will put all our training samples
-path_source = '20BN-JESTER' # The folder that contains all the data (Jester 20bn)
-csv_file = 'data_csv/jester-v1-train.csv' # training csv file
+path_dest = './training_samples/' # The folder where we will put all our training samples
+path_source = './dataset/Train/' # The folder that contains all the data (Jester 20bn)
+csv_file = './dataset/Train.csv' # training csv file
 
-file = open(csv_file, 'r')
-reader = csv.reader(file, delimiter=';')
-count = 0
-simple = 1500 # number of samples by class for training
+sample = 1500 # number of samples by class for training
 class_ = ['Thumb Up', 'Swiping Right', 'Sliding Two Fingers Left', 'No gesture'] # The classes we want to use
 rows = []
 
 for c in class_:
-    for line in reader:
-        target = line[1]
-        ref = line[0]
+	count = 0  # Reset count for each class
+	with open(csv_file, 'r') as file:  # Reopen the file for each class
+		reader = csv.reader(file, delimiter=',')
+		for line in reader:
+			target = line[1]
+			ref = line[0]
 
-        if target == c:
-            dep  = copyDirectory(path_source+ref , path_dest+ref)
-            if dep == 1:
-                count += 1
-                rows.append([ref, target])
-            if count == simple:
-                break
+			if target == c:
+				dep  = copyDirectory(path_source+ref , path_dest+ref)
+				if dep == 1:
+					count += 1
+					rows.append([ref, target])
+				if count == sample:
+					count = 0
+					break
 
 # you can uncomment this code if you want to create your own csv for the samples
-'''with open(path_dest+'train.csv', 'wt') as f:
+with open(path_dest+'train.csv', 'wt') as f:
 	csv_writer = csv.writer(f, quoting = csv.QUOTE_ALL)
-	csv_writer.writerows(rows)'''
+	csv_writer.writerows(rows)

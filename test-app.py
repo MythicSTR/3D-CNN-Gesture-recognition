@@ -75,12 +75,18 @@ class Conv3DModel(tf.keras.Model):
 
 #%%
 new_model = Conv3DModel()
-#%%
-new_model.compile(loss='sparse_categorical_crossentropy',
-                  optimizer=tf.keras.optimizers.RMSprop())
+# #%%
+# new_model.compile(loss='sparse_categorical_crossentropy',
+#                   optimizer=tf.keras.optimizers.RMSprop())
 
-#%%
-new_model.load_weights('weights/path_to_my_weights2')
+# #%%
+# new_model.load_weights('weights/path_to_my_weights2')
+
+# Create a checkpoint object
+checkpoint = tf.train.Checkpoint(model=new_model)
+
+# Restore the weights
+checkpoint.restore('weights/path_to_my_weights2.index').expect_partial()
 
 #%%
 to_predict = []
