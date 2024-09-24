@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jun 20 20:40:23 2019
-@author: santonas
-"""
-
-
-#%%
 import tensorflow as tf
 print(tf.__version__)
 import numpy as np
@@ -13,18 +5,17 @@ import cv2
 from sklearn.preprocessing import StandardScaler
 from time import sleep
 
-#%%
 classes = [
     "Swiping Right",
     "Sliding Two Fingers Left",
     "No gesture",
     "Thumb Up"
     ]
-#%%
+
 def rgb2gray(rgb):
     return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
 
-#%%
+
 def normaliz_data(np_data):
     # Normalisation
     scaler = StandardScaler()
@@ -32,13 +23,9 @@ def normaliz_data(np_data):
     scaled_images  = np_data.reshape(-1, 30, 64, 64, 1)
     return scaled_images
 
-#%%
 def normaliz_data2(v):
     normalized_v = v / np.sqrt(np.sum(v**2))
     return normalized_v
-
-
-#%%
 
 class Conv3DModel(tf.keras.Model):
   def __init__(self):
@@ -73,7 +60,7 @@ class Conv3DModel(tf.keras.Model):
     x = self.d1(x)
     return self.out(x)
 
-#%%
+
 new_model = Conv3DModel()
 # #%%
 # new_model.compile(loss='sparse_categorical_crossentropy',
@@ -88,7 +75,6 @@ checkpoint = tf.train.Checkpoint(model=new_model)
 # Restore the weights
 checkpoint.restore('weights/path_to_my_weights2.index').expect_partial()
 
-#%%
 to_predict = []
 num_frames = 0
 cap = cv2.VideoCapture(0)
